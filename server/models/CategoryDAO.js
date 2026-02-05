@@ -33,6 +33,10 @@ const CategoryDAO = {
   async delete(id) {
     const result = await Models.Category.findByIdAndDelete(id).exec();
     return result;
+  },
+  async selectByID ( _id ) {
+    const category = await Models.Category.findById(_id).exec();
+    return category;
   }
 };
 

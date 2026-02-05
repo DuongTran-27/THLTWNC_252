@@ -5,6 +5,7 @@ import Home from './HomeComponent';
 import Login from './LoginComponent';
 import { Routes , Route , Navigate } from 'react-router-dom';
 import Category from './CategoryComponent';
+import Product from './ProductComponent';
 
 class Main extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -19,6 +20,7 @@ class Main extends Component {
             <Route path="/admin" element={<Navigate replace to="/admin/home" />} />
             <Route path="/admin/home" element={<Home />} />
             <Route path="/admin/category" element={<Category />} />
+            <Route path="/admin/product" element={<Product />} />
           </Routes>
         </div>
       );

@@ -8,55 +8,78 @@ const JwtUtil = require('../utils/JwtUtil');
 const AdminDAO = require('../models/AdminDAO');
 const CategoryDAO = require ('../models/CategoryDAO') ;
 
-// login
-router.post('/login', async function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
+// list
+router.get('/products', JwtUtil.checkToken, async function (req, res) {
+  var products = await ProductDAO.selectAll();
 
-  if (username && password) {
-    try {
-      const admin = await AdminDAO.selectByUsernameAndPassword(
-        username,
-        password
-      );
+  const sizePage = 4;
+  const noPages = Math.ceil(products.length / sizePage);
 
-      if (admin) {
-        const token = JwtUtil.genToken(username, password);
-        res.json({
-          success: true,
-          message: 'Authentication successful',
-          token: token
-        });
-      } else {
-        res.json({
-          success: false,
-          message: 'Incorrect username or password'
-        });
-      }
-    } catch (err) {
-      console.error('Error during admin login:', err);
-      res.status(500).json({
-        success: false,
-        message: 'Server error while accessing database'
-      });
-    }
-  } else {
-    res.json({
-      success: false,
-      message: 'Please input username and password'
-    });
-  }
+  var curPage = 1;
+  if (req.query.page) curPage = parseInt(req.query.page);
+
+  const offset = (curPage - 1) * sizePage;
+  products = products.slice(offset, offset + sizePage);
+
+  const result = {
+    products: products,
+    noPages: noPages,
+    curPage: curPage
+  };
+  res.json(result);
 });
 
-router.get('/token', JwtUtil.checkToken, function (req, res) {
-  const token =
-    req.headers['x-access-token'] || req.headers['authorization'];
+// add
+router.post('/products', JwtUtil.checkToken, async function (req, res) {
+  const name = req.body.name;
+  const price = req.body.price;
+  const cid = req.body.category;
+  const image = req.body.image;
+  const now = new Date().getTime();
 
-  res.json({
-    success: true,
-    message: 'Token is valid',
-    token: token
-  });
+  const category = await CategoryDAO.selectByID(cid);
+
+  const product = {
+    name: name,
+    price: price,
+    image: image,
+    cdate: now,
+    category: category
+  };
+
+  const result = await ProductDAO.insert(product);
+  res.json(result);
+});
+
+// update
+router.put('/products', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.body.id;
+  const name = req.body.name;
+  const price = req.body.price;
+  const cid = req.body.category;
+  const image = req.body.image;
+  const now = new Date().getTime();
+
+  const category = await CategoryDAO.selectByID(cid);
+
+  const product = {
+    _id: _id,
+    name: name,
+    price: price,
+    image: image,
+    cdate: now,
+    category: category
+  };
+
+  const result = await ProductDAO.update(product);
+  res.json(result);
+});
+
+// delete
+router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const result = await ProductDAO.delete(_id);
+  res.json(result);
 });
 
 // category
@@ -142,5 +165,29 @@ router.delete('/categories/:id', JwtUtil.checkToken, async function (req, res) {
   }
 });
 
+// product
+router.put('/products', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.body.id;
+  const name = req.body.name;
+  const price = req.body.price;
+  const cid = req.body.category;
+  const image = req.body.image;
+
+  const now = new Date().getTime(); // milliseconds
+
+  const category = await CategoryDAO.selectByID(cid);
+
+  const product = {
+    _id: _id,
+    name: name,
+    price: price,
+    image: image,
+    cdate: now,
+    category: category
+  };
+
+  const result = await ProductDAO.update(product);
+  res.json(result);
+});
 
 module.exports = router;
