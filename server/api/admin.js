@@ -258,6 +258,64 @@ router.get('/products', JwtUtil.checkToken, async function (req, res) {
   }
 });
 
+// update product (protected)
+router.put('/products/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  try {
+    const name = req.body && req.body.name ? req.body.name.trim() : '';
+    const price = req.body && typeof req.body.price !== 'undefined' ? Number(req.body.price) : null;
+    const cid = req.body && req.body.category ? req.body.category : '';
+    const image = req.body && req.body.image ? req.body.image : '';
+
+    if (!mongoose.isValidObjectId(_id)) {
+      return res.status(400).json({ success: false, message: 'Invalid product id' });
+    }
+
+    if (!name || price === null || !cid) {
+      return res.status(400).json({ success: false, message: 'name, price and category are required' });
+    }
+
+    if (!mongoose.isValidObjectId(cid)) {
+      return res.status(400).json({ success: false, message: 'Invalid category id' });
+    }
+
+    const category = await CategoryDAO.selectById(cid);
+    if (!category) {
+      return res.status(404).json({ success: false, message: 'Category not found' });
+    }
+
+    const prod = { _id: _id, name: name, price: price, image: image, category: category };
+    const result = await ProductDAO.update(prod);
+    if (result) {
+      return res.json({ success: true, data: result });
+    } else {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+  } catch (err) {
+    console.error('Error updating product:', err);
+    return res.status(500).json({ success: false, message: 'Server error updating product' });
+  }
+});
+
+// delete product (protected)
+router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  try {
+    if (!mongoose.isValidObjectId(_id)) {
+      return res.status(400).json({ success: false, message: 'Invalid product id' });
+    }
+    const result = await ProductDAO.delete(_id);
+    if (result) {
+      return res.json({ success: true, data: result });
+    } else {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    return res.status(500).json({ success: false, message: 'Server error deleting product' });
+  }
+});
+
 router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
   const _id = req.params.id;
 

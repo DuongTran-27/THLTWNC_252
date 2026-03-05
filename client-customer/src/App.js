@@ -1,6 +1,9 @@
 // CLI : npm install axios --save
 import axios from 'axios';
+import './App.css';
 import React, { Component } from 'react';
+import Main from './components/MainComponent';
+import { BrowserRouter } from 'react-router-dom';
 
 class App extends Component {
   constructor(props) {
@@ -12,11 +15,9 @@ class App extends Component {
 
   render() {
     return (
-      // Cần có thẻ bao bọc (như <div>) cho các phần tử JSX
-      <div>
-        <h1>Customer page</h1>
-        <p>{this.state.message}</p> 
-      </div>
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
     );
   }
 

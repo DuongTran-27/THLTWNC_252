@@ -22,7 +22,10 @@ app.use((req, res, next) => {
 
 // apis
 app.use('/api/admin', require('./api/admin.js'));
+// customer routes
+app.use('/api/customer', require('./api/customer.js'));
 
+// start server AFTER all routes/middleware registered
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
