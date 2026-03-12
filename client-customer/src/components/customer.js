@@ -8,7 +8,6 @@ const CustomerDAO = require('../models/CustomerDAO');
 // utils
 const CryptoUtil = require('../utils/CryptoUtil');
 const EmailUtil = require('../utils/EmailUtil');
-const JwtUtil = require('../utils/JwtUtil');
 
 // category
 router.get('/categories', async function (req, res) {
@@ -99,16 +98,13 @@ router.post('/active', async function (req, res) {
 // customer: signup
 router.post('/signup', async function (req, res) {
     try {
-        console.log('POST /api/customer/signup body:', req.body);
-
-        // normalize inputs
-        const username = req.body.username ? req.body.username.trim() : '';
+        const username = req.body.username;
         const password = req.body.password;
         const name = req.body.name;
         const phone = req.body.phone;
-        const email = req.body.email ? req.body.email.trim().toLowerCase() : '';
+        const email = req.body.email;
 
-    const dbCust = await CustomerDAO.selectByUsernameOrEmail(username, email);
+        const dbCust = await CustomerDAO.selectByUsernameOrEmail(username, email);
 
         if (dbCust) {
             return res.json({ success: false, message: 'Exists username or email' });
@@ -144,66 +140,6 @@ router.post('/signup', async function (req, res) {
         console.error('POST /api/customer/signup error:', err);
         res.status(500).json({ error: 'Server error' });
     }
-});
-// customer
-router.post('/login', async function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  if (username && password) {
-    const customer = await CustomerDAO.selectByUsernameAndPassword(username, password);
-
-        if (customer) {
-            if (customer.active === 1) {
-                // generate token including username and password (keeps same shape as admin token)
-                const token = JwtUtil.genToken(username, password);
-
-                res.json({
-                    success: true,
-                    message: 'Authentication successful',
-                    token: token,
-                    customer: customer
-                });
-            } else {
-                res.json({ success: false, message: 'Account is deactive' });
-            }
-        } else {
-      res.json({ success: false, message: 'Incorrect username or password' });
-    }
-  } else {
-    res.json({ success: false, message: 'Please input username and password' });
-  }
-});
-
-router.get('/token', JwtUtil.checkToken, function (req, res) {
-  const token = req.headers['x-access-token'] || req.headers['authorization'];
-
-  res.json({
-    success: true,
-    message: 'Token is valid',
-    token: token
-  });
-});
-// myprofile
-router.put('/customers/:id', JwtUtil.checkToken, async function (req, res) {
-  const _id = req.params.id;
-  const username = req.body.username;
-  const password = req.body.password;
-  const name = req.body.name;
-  const phone = req.body.phone;
-  const email = req.body.email;
-
-  const customer = {
-    _id: _id,
-    username: username,
-    password: password,
-    name: name,
-    phone: phone,
-    email: email
-  };
-
-  const result = await CustomerDAO.update(customer);
-  res.json(result);
 });
 
 module.exports = router;
