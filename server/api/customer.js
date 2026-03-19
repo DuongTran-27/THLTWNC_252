@@ -5,6 +5,7 @@ const router = express.Router();
 const CategoryDAO = require('../models/CategoryDAO');
 const ProductDAO = require('../models/ProductDAO');
 const CustomerDAO = require('../models/CustomerDAO');
+const OrderDAO = require('../models/OrderDAO');
 // utils
 const CryptoUtil = require('../utils/CryptoUtil');
 const EmailUtil = require('../utils/EmailUtil');
@@ -204,6 +205,36 @@ router.put('/customers/:id', JwtUtil.checkToken, async function (req, res) {
 
   const result = await CustomerDAO.update(customer);
   res.json(result);
+});
+// checkout (create order) - protect with token
+router.post('/checkout', JwtUtil.checkToken, async function (req, res) {
+    try {
+        const now = new Date().getTime();
+        const total = req.body.total || 0;
+        const items = req.body.items || [];
+        // client may send customer info or we can read from token payload in future
+        const customer = req.body.customer || null;
+
+        const order = {
+            cdate: now,
+            total: total,
+            status: 'PENDING',
+            customer: customer,
+            items: items
+        };
+
+        const result = await OrderDAO.insert(order);
+        res.json(result);
+    } catch (err) {
+        console.error('POST /api/customer/checkout error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+// myorders
+router.get('/orders/customer/:cid', JwtUtil.checkToken, async function(req, res){
+    const _cid = req.params.cid;
+    const orders = await OrderDAO.selectByCustID(_cid);
+    res.json(orders);
 });
 
 module.exports = router;

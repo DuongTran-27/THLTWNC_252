@@ -6,14 +6,20 @@ class MyProvider extends Component {
     super(props);
     this.state = { // global state
       // variables
+      mycart: [],
       token: '',
       customer: null,
 
       // functions
+      setMyCart: this.setMyCart,
       setToken: this.setToken,
       setCustomer: this.setCustomer
     };
   }
+  setMyCart = (value) => {
+    this.setState({ mycart: value });
+  }
+
 
   setToken = (value) => {
     this.setState({ token: value });

@@ -8,7 +8,7 @@ const JwtUtil = require('../utils/JwtUtil');
 const AdminDAO = require('../models/AdminDAO');
 const CategoryDAO = require('../models/CategoryDAO');
 const ProductDAO = require('../models/ProductDAO');
-
+const OrderDAO = require('../models/OrderDAO');
 // login
 router.post('/login', async function (req, res) {
   const username = req.body.username;
@@ -334,6 +334,19 @@ router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
     console.error('Error deleting product:', err);
     res.status(500).json({ success: false, message: 'Server error deleting product' });
   }
+});
+// order
+router.get('/orders', JwtUtil.checkToken, async function (req, res) {
+  const orders = await OrderDAO.selectAll();
+  res.json(orders);
+});
+// order
+router.put('/orders/status/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const newStatus = req.body.status;
+
+  const result = await OrderDAO.update(_id, newStatus);
+  res.json(result);
 });
 
 
