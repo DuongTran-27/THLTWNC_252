@@ -9,6 +9,8 @@ const AdminDAO = require('../models/AdminDAO');
 const CategoryDAO = require('../models/CategoryDAO');
 const ProductDAO = require('../models/ProductDAO');
 const OrderDAO = require('../models/OrderDAO');
+const CustomerDAO = require('../models/CustomerDAO');
+const EmailUtil = require('../utils/EmailUtil');
 // login
 router.post('/login', async function (req, res) {
   const username = req.body.username;
@@ -349,5 +351,49 @@ router.put('/orders/status/:id', JwtUtil.checkToken, async function (req, res) {
   res.json(result);
 });
 
+// customer list (admin)
+router.get('/customers', JwtUtil.checkToken, async function (req, res) {
+  try {
+    const customers = await CustomerDAO.selectAll();
+    res.json(customers);
+  } catch (err) {
+    console.error('Error fetching customers:', err);
+    res.status(500).json({ success: false, message: 'Server error fetching customers' });
+  }
+});
+
+// orders by customer id (admin)
+router.get('/orders/customer/:cid', JwtUtil.checkToken, async function (req, res) {
+  try {
+    const cid = req.params.cid;
+    const orders = await OrderDAO.selectByCustID(cid);
+    res.json(orders);
+  } catch (err) {
+    console.error('Error fetching orders by customer:', err);
+    res.status(500).json({ success: false, message: 'Server error fetching orders' });
+  }
+});
+router.put('/customer/deactive/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const token = req.body.token;
+  const result = await CustomerDAO.update(_id, token, 0);
+  res.json(result);
+});
+
+// customer
+router.get('/customer/sendmail/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const cust = await CustomerDAO.selecByID(_id);
+  if (cust) {
+    const send = await EmailUtil.send(cust.email, cust._id, cust.token);
+    if (send) {
+      res.json({ success: true, message: 'Please check email' })
+    } else {
+      res.json({ success: false, message: 'Email not sent' })
+    }
+  } else {
+    res.json({ success: false, message: 'Customer not found' })
+  }
+});
 
 module.exports = router;

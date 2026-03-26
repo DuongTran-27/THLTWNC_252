@@ -6,7 +6,20 @@ const JwtUtil = require('../utils/JwtUtil');
 
 // daos
 const AdminDAO = require('../models/AdminDAO');
-const CategoryDAO = require ('../models/CategoryDAO') ;
+
+const CustomerDAO = require('../models/CustomerDAO');
+
+// customers
+router.get('/customers', JwtUtil.checkToken, async function (req, res) {
+  const customers = await CustomerDAO.selectAll();
+  res.json(customers);
+});
+// orders
+router.get('/orders', JwtUtil.checkToken, async function (req, res) {
+  const _cid = req.query.cid;
+  const orders = await OrderDAO.selectByCustID(_cid);
+  res.json(orders);
+});
 
 // list
 router.get('/products', JwtUtil.checkToken, async function (req, res) {

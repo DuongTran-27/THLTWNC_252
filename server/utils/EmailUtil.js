@@ -9,7 +9,7 @@ try {
   // CLI: npm install nodemailer --save
   const nodemailer = require('nodemailer');
   transporter = nodemailer.createTransport({
-    service: 'hotmail',
+    service: 'gmail',
     auth: {
       user: MyConstants.EMAIL_USER,
       pass: MyConstants.EMAIL_PASS
