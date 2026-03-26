@@ -376,7 +376,7 @@ router.get('/orders/customer/:cid', JwtUtil.checkToken, async function (req, res
 router.put('/customer/deactive/:id', JwtUtil.checkToken, async function (req, res) {
   const _id = req.params.id;
   const token = req.body.token;
-  const result = await CustomerDAO.update(_id, token, 0);
+  const result = await CustomerDAO.active(_id, token, 0);
   res.json(result);
 });
 
