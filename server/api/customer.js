@@ -4,12 +4,15 @@ const router = express.Router();
 // daos
 const CategoryDAO = require('../models/CategoryDAO');
 const ProductDAO = require('../models/ProductDAO');
+<<<<<<< HEAD
 const CustomerDAO = require('../models/CustomerDAO');
 const OrderDAO = require('../models/OrderDAO');
 // utils
 const CryptoUtil = require('../utils/CryptoUtil');
 const EmailUtil = require('../utils/EmailUtil');
 const JwtUtil = require('../utils/JwtUtil');
+=======
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 
 // category
 router.get('/categories', async function (req, res) {
@@ -44,7 +47,16 @@ router.get('/products/category/:cid', async function (req, res) {
         res.status(500).json({ error: 'Server error' });
     }
 });
+<<<<<<< HEAD
 // product search (by keyword) - implemented below with try/catch
+=======
+// product
+router.get('/products/search/:keyword', async function (req, res) {
+    const keyword = req.params.keyword;
+    const products = await ProductDAO.selectByKeyword(keyword);
+    res.json(products);
+});
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 router.get('/products/hot', async function (req, res) {
     try {
         const top = parseInt(req.query.top) || 3;
@@ -73,13 +85,18 @@ router.get('/products/:id', async function (req, res) {
 router.get('/products/search/:keyword', async function (req, res) {
     try {
         const keyword = req.params.keyword;
+<<<<<<< HEAD
         const products = await ProductDAO.selectByKeyword(keyword);
+=======
+    const products = await ProductDAO.selectByKeyword(keyword);
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
         res.json(products);
     } catch (err) {
         console.error('GET /api/customer/products/search/:keyword error:', err);
         res.status(500).json({ error: 'Server error' });
     }
 });
+<<<<<<< HEAD
 
 // customer: activate account
 router.post('/active', async function (req, res) {
@@ -238,6 +255,13 @@ router.get('/orders/customer/:cid', JwtUtil.checkToken, async function (req, res
     const _cid = req.params.cid;
     const orders = await OrderDAO.selectByCustID(_cid);
     res.json(orders);
+=======
+// product
+router.get('/products/:id', async function (req, res) {
+    const _id = req.params.id;
+    const product = await ProductDAO.selectByID(_id);
+    res.json(product);
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 });
 
 module.exports = router;

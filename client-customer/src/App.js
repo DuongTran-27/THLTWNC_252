@@ -4,8 +4,11 @@ import './App.css';
 import React, { Component } from 'react';
 import Main from './components/MainComponent';
 import { BrowserRouter } from 'react-router-dom';
+<<<<<<< HEAD
 import MyProvider from './contexts/MyProvider';
 
+=======
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 
 class App extends Component {
   constructor(props) {
@@ -17,11 +20,17 @@ class App extends Component {
 
   render() {
     return (
+<<<<<<< HEAD
       <MyProvider>
         <BrowserRouter>
           <Main />
         </BrowserRouter>
       </MyProvider>
+=======
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
     );
   }
 

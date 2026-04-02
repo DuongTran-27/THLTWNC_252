@@ -25,6 +25,7 @@ app.use('/api/admin', require('./api/admin.js'));
 // customer routes
 app.use('/api/customer', require('./api/customer.js'));
 
+<<<<<<< HEAD
 // deployment
 const path = require('path');
 // '/admin' serve the files at client-admin/build/* as static files
@@ -38,6 +39,8 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../client-customer/build', 'index.html'));
 });
 
+=======
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 // start server AFTER all routes/middleware registered
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);

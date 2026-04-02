@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Optional dependency: nodemailer
 // Recommended: run `npm install nodemailer --save` in the server folder to enable real email sending.
 const MyConstants = require('./MyConstants');
@@ -21,12 +22,28 @@ try {
 
 const EmailUtil = {
   // send returns a Promise that resolves to true on success, false on failure or when transporter is not available
+=======
+// CLI: npm install nodemailer --save
+const nodemailer = require('nodemailer');
+const MyConstants = require('./MyConstants');
+
+const transporter = nodemailer.createTransport({
+  service: 'hotmail',
+  auth: {
+    user: MyConstants.EMAIL_USER,
+    pass: MyConstants.EMAIL_PASS
+  }
+});
+
+const EmailUtil = {
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
   send(email, id, token) {
     const text =
       'Thanks for signing up, please input these informations to activate your account:\n' +
       '\t.id: ' + id + '\n' +
       '\t.token: ' + token;
 
+<<<<<<< HEAD
     if (!transporter) {
       // nodemailer not installed / not configured: for development we'll log the activation info
       // and resolve true so the signup flow can continue during local testing.
@@ -36,6 +53,9 @@ const EmailUtil = {
     }
 
     return new Promise(function (resolve) {
+=======
+    return new Promise(function (resolve, reject) {
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
       const mailOptions = {
         from: MyConstants.EMAIL_USER,
         to: email,
@@ -43,6 +63,7 @@ const EmailUtil = {
         text: text
       };
 
+<<<<<<< HEAD
       transporter.sendMail(mailOptions, function (err) {
         if (err) {
           console.error('transporter.sendMail error:', err);
@@ -50,6 +71,11 @@ const EmailUtil = {
         } else {
           resolve(true);
         }
+=======
+      transporter.sendMail(mailOptions, function (err, result) {
+        if (err) reject(err);
+        else resolve(true);
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
       });
     });
   }

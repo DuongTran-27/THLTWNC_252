@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import withRouter from '../utils/withRouter';
+<<<<<<< HEAD
 import MyContext from '../contexts/MyContext';
 
 class ProductDetail extends Component {
@@ -12,6 +13,14 @@ class ProductDetail extends Component {
         this.state = {
             product: null,
             txtQuantity: 1
+=======
+
+class ProductDetail extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            product: null
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
         };
     }
 
@@ -51,13 +60,21 @@ class ProductDetail extends Component {
                                         <tr>
                                             <td align="right">Quantity:</td>
                                             <td>
+<<<<<<< HEAD
                                                 <input type="number" min="1" max="99" value={this.state.txtQuantity} onChange={(e) => { this.setState({ txtQuantity: e.target.value }) }} />  
+=======
+                                                <input type="number" min="1" max="99" />
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
                                             </td>
                                         </tr>
                                         <tr>
                                             <td></td>
                                             <td>
+<<<<<<< HEAD
                                                 <input type="submit" value="ADD TO CART" onClick={(e) => this.btnAdd2CartClick(e) } />
+=======
+                                                <input type="submit" value="ADD TO CART" />
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
                                             </td>
                                         </tr>
                                     </tbody>
@@ -69,6 +86,7 @@ class ProductDetail extends Component {
             );
         }
         return (<div />);
+<<<<<<< HEAD
         
     }
     btnAdd2CartClick(e) {
@@ -91,6 +109,9 @@ class ProductDetail extends Component {
             }
 
         }
+=======
+    }
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 
     componentDidMount() {
         const params = this.props.params;

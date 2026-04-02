@@ -8,9 +8,13 @@ const JwtUtil = require('../utils/JwtUtil');
 const AdminDAO = require('../models/AdminDAO');
 const CategoryDAO = require('../models/CategoryDAO');
 const ProductDAO = require('../models/ProductDAO');
+<<<<<<< HEAD
 const OrderDAO = require('../models/OrderDAO');
 const CustomerDAO = require('../models/CustomerDAO');
 const EmailUtil = require('../utils/EmailUtil');
+=======
+
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 // login
 router.post('/login', async function (req, res) {
   const username = req.body.username;
@@ -337,6 +341,7 @@ router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
     res.status(500).json({ success: false, message: 'Server error deleting product' });
   }
 });
+<<<<<<< HEAD
 // order
 router.get('/orders', JwtUtil.checkToken, async function (req, res) {
   const orders = await OrderDAO.selectAll();
@@ -395,5 +400,8 @@ router.get('/customer/sendmail/:id', JwtUtil.checkToken, async function (req, re
     res.json({ success: false, message: 'Customer not found' })
   }
 });
+=======
+
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 
 module.exports = router;

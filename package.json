@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "mongoose": "^9.1.3",
+<<<<<<< HEAD
     "nodemailer": "^8.0.4",
+=======
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
     "react-router-dom": "^7.13.1"
   }
 }

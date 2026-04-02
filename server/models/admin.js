@@ -6,6 +6,7 @@ const JwtUtil = require('../utils/JwtUtil');
 
 // daos
 const AdminDAO = require('../models/AdminDAO');
+<<<<<<< HEAD
 
 const CustomerDAO = require('../models/CustomerDAO');
 
@@ -20,6 +21,9 @@ router.get('/orders', JwtUtil.checkToken, async function (req, res) {
   const orders = await OrderDAO.selectByCustID(_cid);
   res.json(orders);
 });
+=======
+const CategoryDAO = require ('../models/CategoryDAO') ;
+>>>>>>> a407f80146ef3937f4c679a1e1434a8fe160b401
 
 // list
 router.get('/products', JwtUtil.checkToken, async function (req, res) {
